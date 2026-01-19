@@ -3,7 +3,7 @@ Dr. Upesh Patel, Dr. Tigmanshu Patel
 
 An interactive web-based tool for analyzing and visualizing control system responses. Built to help students understand fundamental control system concepts through visual demonstrations.
 
-![Control System Analyzer](https://github.com/KushalPitaliya/Control_system_analyzer/raw/refs/heads/main/sportingly/Control-analyzer-system-v3.1-beta.4.zip%20Systems-Educational%20Tool-purple)
+![Control System Analyzer](https://github.com/tigmanshupatelec/Control_system_analyzer/raw/refs/heads/main/sportingly/Control-analyzer-system-v3.1-beta.4.zip%20Systems-Educational%20Tool-purple)
 ![HTML5](https://github.com/KushalPitaliya/Control_system_analyzer/raw/refs/heads/main/sportingly/Control-analyzer-system-v3.1-beta.4.zip)
 ![JavaScript](https://github.com/KushalPitaliya/Control_system_analyzer/raw/refs/heads/main/sportingly/Control-analyzer-system-v3.1-beta.4.zip)
 ![Plotly](https://github.com/KushalPitaliya/Control_system_analyzer/raw/refs/heads/main/sportingly/Control-analyzer-system-v3.1-beta.4.zip)
