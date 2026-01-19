@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <title>Advanced Control System Analyzer</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="styles.css" />
+
+  <!-- Plotly -->
+  <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+
+  <!-- MathJax CONFIG (must come BEFORE mathjax script) -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      }
+    };
+  </script>
+
+  <!-- MathJax Engine -->
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+  <!-- Plot-size protection -->
+  <style>
+    #freq-plot,
+    #time-plot {
+      min-height: 420px;
+    }
+
+    #pz-plot {
+      min-height: 360px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>Advanced Control System Response Analyzer</h1>
+    <p class="subtitle">Comprehensive Time &amp; Frequency Domain Analysis with Stability &amp; Root Locus</p>
+
+    <!-- Tabs -->
+    <div class="tab-container">
+      <button class="tab-button active" data-tab="time-response">Time Response Analysis</button>
+      <button class="tab-button" data-tab="frequency-response">Frequency / Root Locus</button>
+      <button class="tab-button" data-tab="stability-analysis">Stability Analysis</button>
+      <button class="tab-button" data-tab="stability-criteria">Stability Criteria Tables</button>
+    </div>
+
+    <!-- TIME SECTION -->
+    <div id="time-response" class="tab-content active">
+      <div class="analysis-section">
+        <h2>Time Domain Analysis</h2>
+
+        <div class="layout-two-columns">
+          <div class="main-column">
+
+            <div class="params-section">
+              <div class="param-group">
+                <label>System Order:
+                  <select id="time-system-order">
+                    <option value="first">First-Order</option>
+                    <option value="second">Second-Order</option>
+                    <option value="higher">Higher-Order</option>
+                  </select>
+                </label>
+
+                <label>Input Type:
+                  <select id="time-input-type">
+                    <option value="step">Step Input</option>
+                    <option value="ramp">Ramp Input</option>
+                    <option value="parabolic">Parabolic Input</option>
+                    <option value="impulse">Impulse Input</option>
+                    <option value="sinusoidal">Sinusoidal Input</option>
+                  </select>
+                </label>
+
+                <div id="sinusoidal-params" class="hidden">
+                  <label>Frequency (rad/s):
+                    <input type="number" id="sin-freq" value="1" step="0.1">
+                  </label>
+                  <label>Amplitude:
+                    <input type="number" id="sin-amp" value="1" step="0.1">
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <div id="time-params-dynamic"></div>
+            <div id="zpk-display" class="zpk-display"></div>
+
+            <button id="create-time-plot" class="analyze-btn">Analyze Time Response</button>
+
+            <div id="time-plot" class="plot-container"></div>
+
+            <div class="results-section">
+              <h3>Time Response Parameters</h3>
+              <table class="response-table">
+                <tbody>
+                  <tr>
+                    <th>Delay Time (Td)</th>
+                    <td id="time-res-delay">-</td>
+                  </tr>
+                  <tr>
+                    <th>Rise Time (Tr)</th>
+                    <td id="time-res-rise">-</td>
+                  </tr>
+                  <tr>
+                    <th>Peak Time (Tp)</th>
+                    <td id="time-res-peak">-</td>
+                  </tr>
+                  <tr>
+                    <th>Settling Time (Ts)</th>
+                    <td id="time-res-settle">-</td>
+                  </tr>
+                  <tr>
+                    <th>Max Overshoot (Mp)</th>
+                    <td id="time-res-overshoot">-</td>
+                  </tr>
+                  <tr>
+                    <th>Steady-State Value</th>
+                    <td id="time-res-ssv">-</td>
+                  </tr>
+                  <tr>
+                    <th>Steady-State Error (Ess)</th>
+                    <td id="time-res-sse">-</td>
+                  </tr>
+                </tbody>
+              </table>
+              <div class="interpretation-box">
+                <h3>Interpretation</h3>
+                <p id="time-interpretation">Run analysis to view interpretation.</p>
+              </div>
+            </div>
+          </div>
+
+          <aside class="side-column">
+            <div id="time-help-card" class="help-card"></div>
+          </aside>
+        </div>
+      </div>
+    </div>
+
+    <!-- FREQUENCY + ROOT LOCUS -->
+    <div id="frequency-response" class="tab-content">
+      <div class="analysis-section">
+        <h2>Frequency Domain & Root Locus Analysis</h2>
+
+        <div class="layout-two-columns">
+          <div class="main-column">
+
+            <div class="params-section">
+              <div class="param-group">
+
+                <label>System Order:
+                  <select id="freq-system-order">
+                    <option value="first">First-Order</option>
+                    <option value="second">Second-Order</option>
+                    <option value="higher">Higher-Order</option>
+                  </select>
+                </label>
+
+                <label>Plot Type:
+                  <select id="freq-plot-type">
+                    <option value="bode">Bode Plot</option>
+                    <option value="nyquist">Nyquist Plot</option>
+                    <option value="polar">Polar Plot</option>
+                    <option value="root-locus">Root Locus</option>
+                  </select>
+                </label>
+
+                <label>Frequency Range:</label>
+                <div class="freq-range">
+                  <input type="number" id="freq-min" value="0.1" step="0.1">
+                  <span>to</span>
+                  <input type="number" id="freq-max" value="1000" step="1">
+                </div>
+
+                <label class="checkbox-group">
+                  <input type="checkbox" id="show-margins" checked>
+                  Show Stability Margins
+                </label>
+
+                <div style="margin-top:10px;">
+                  <label>Root Locus K Sweep</label>
+                  <div class="param-group">
+                    <label>Start K: <input id="rl-k-min" type="number" value="0"></label>
+                    <label>End K: <input id="rl-k-max" type="number" value="100"></label>
+                    <label>Steps: <input id="rl-k-steps" type="number" value="200"></label>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <div id="freq-params-dynamic"></div>
+            <div id="freq-zpk-display" class="zpk-display"></div>
+
+            <button id="create-freq-plot" class="analyze-btn">Analyze Frequency / Root Locus</button>
+
+            <div id="freq-plot" class="plot-container"></div>
+
+            <div class="extra-tools">
+              <h3>Pole–Zero Map</h3>
+              <button id="plot-pz-map" class="secondary-btn">Plot Pole–Zero Map</button>
+              <div id="pz-plot" class="plot-container"></div>
+              <div id="pz-text"></div>
+            </div>
+
+            <div class="results-section">
+              <h3>Frequency Response Parameters</h3>
+              <table class="response-table">
+                <tbody>
+                  <tr>
+                    <th>Gain Margin (GM)</th>
+                    <td id="freq-res-gm">-</td>
+                  </tr>
+                  <tr>
+                    <th>Phase Margin (PM)</th>
+                    <td id="freq-res-pm">-</td>
+                  </tr>
+                  <tr>
+                    <th>Gain Crossover (ωgc)</th>
+                    <td id="freq-res-wcg">-</td>
+                  </tr>
+                  <tr>
+                    <th>Phase Crossover (ωpc)</th>
+                    <td id="freq-res-wcp">-</td>
+                  </tr>
+                  <tr>
+                    <th>Bandwidth (ωb)</th>
+                    <td id="freq-res-bw">-</td>
+                  </tr>
+                  <tr>
+                    <th>Resonant Peak (Mr)</th>
+                    <td id="freq-res-mr">-</td>
+                  </tr>
+                  <tr>
+                    <th>Corner Frequencies</th>
+                    <td id="freq-res-corners">-</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="interpretation-box">
+              <h3>Interpretation</h3>
+              <p id="freq-interpretation">Run Bode or Root Locus to view interpretation.</p>
+            </div>
+          </div>
+
+          <aside class="side-column">
+            <div id="freq-help-card" class="help-card"></div>
+          </aside>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- STABILITY -->
+    <div id="stability-analysis" class="tab-content">
+      <div class="analysis-section">
+        <h2>Stability Analysis</h2>
+
+        <div class="layout-two-columns">
+          <div class="main-column">
+
+            <div class="params-section">
+              <label>System Order:
+                <select id="stab-system-order">
+                  <option value="first">First-Order</option>
+                  <option value="second">Second-Order</option>
+                  <option value="higher">Higher-Order</option>
+                </select>
+              </label>
+            </div>
+
+            <div id="stab-params-dynamic"></div>
+            <div id="stab-zpk-display"></div>
+
+            <button id="analyze-stability" class="analyze-btn">Analyze Stability</button>
+
+            <div id="stability-results">
+              <h3>Stability Results</h3>
+              <p id="stability-status">Press Analyze Stability</p>
+              <table class="response-table">
+                <tr>
+                  <th>System Status</th>
+                  <td id="stab-status">-</td>
+                </tr>
+                <tr>
+                  <th>Poles</th>
+                  <td id="stab-poles">-</td>
+                </tr>
+                <tr>
+                  <th>Zeros</th>
+                  <td id="stab-zeros">-</td>
+                </tr>
+                <tr>
+                  <th>BIBO Stable</th>
+                  <td id="stab-bibo">-</td>
+                </tr>
+                <tr>
+                  <th>Routh-Hurwitz</th>
+                  <td id="stab-routh">-</td>
+                </tr>
+              </table>
+            </div>
+
+          </div>
+
+          <aside class="side-column">
+            <div id="stab-help-card" class="help-card"></div>
+          </aside>
+
+        </div>
+      </div>
+    </div>
+
+
+    <!-- CRITERIA SECTION -->
+    <div id="stability-criteria" class="tab-content">
+      <div class="analysis-section">
+
+        <h2>Stability Criteria Tables</h2>
+
+        <label>System Order:
+          <select id="criteria-system-order">
+            <option value="first">First-Order</option>
+            <option value="second">Second-Order</option>
+            <option value="higher">Higher-Order</option>
+          </select>
+        </label>
+
+        <div id="criteria-params-dynamic"></div>
+
+        <button id="analyze-criteria" class="analyze-btn">
+          Generate Stability Tables
+        </button>
+
+        <div class="criteria-results">
+          <h3>Routh-Hurwitz Array</h3>
+          <div id="routh-table"></div>
+
+          <h3>Hurwitz Determinants</h3>
+          <div id="hurwitz-table"></div>
+
+          <h3>Conclusion</h3>
+          <div id="criteria-conclusion">Generate tables to see results</div>
+        </div>
+      </div>
+    </div>
+
+  </div> <!-- end container -->
+
+  <!-- ===========================================
+       MATH.JS AUTO-LOADER + FALLBACK (IMPORTANT)
+       =========================================== -->
+  <script>
+    async function loadMathJS() {
+      const primary = "https://cdn.jsdelivr.net/npm/mathjs@11.8.0/lib/browser/math.js";
+      const fallback = "https://unpkg.com/mathjs@11.8.0/lib/browser/math.js";
+
+      function inject(src) {
+        return new Promise((resolve, reject) => {
+          const s = document.createElement("script");
+          s.src = src;
+          s.onload = resolve;
+          s.onerror = reject;
+          document.head.appendChild(s);
+        });
+      }
+
+      try {
+        await inject(primary);
+        await new Promise(r => setTimeout(r, 50));
+
+        // Check for math.js with either polynomialRoot (correct) or roots (legacy)
+        if (typeof math !== "undefined" && (math.polynomialRoot || math.roots)) {
+          console.log("Loaded math.js (primary) — OK");
+          return;
+        }
+        console.warn("Primary math.js missing polynomial root functions, loading fallback...");
+
+        await inject(fallback);
+        await new Promise(r => setTimeout(r, 50));
+
+        if (typeof math !== "undefined" && (math.polynomialRoot || math.roots)) {
+          console.log("Loaded math.js (fallback) — OK");
+          return;
+        }
+
+        // Don't error - we have a fallback implementation
+        console.warn("math.js loaded but polynomial root functions missing. Using built-in fallback.");
+      } catch (err) {
+        console.warn("Failed to load math.js, using built-in fallback:", err);
+      }
+    }
+
+    loadMathJS().then(() => {
+      console.log("MathJS ready. Initializing Analyzer...");
+      new AdvancedControlSystemAnalyzer();
+    });
+  </script>
+
+  <!-- MAIN SCRIPT -->
+  <script src="script.js"></script>
+
+</body>
+
+</html>
