@@ -1,4 +1,4 @@
-# 🎛️ Advanced Control System Analyzer
+# 🎛️ Control System Analyzer
 
 An interactive web-based tool for analyzing and visualizing control system responses. Built to help students understand fundamental control system concepts through visual demonstrations.
 
